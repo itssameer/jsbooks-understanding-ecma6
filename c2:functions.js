@@ -103,3 +103,43 @@ let book = {
 let bookData = pick(book, "author", "year");
 console.log(bookData.author); // "Nicholas C. Zakas"
 console.log(bookData.year); // 2016
+
+//rest parameter restrictions.
+//1. there can only be one rest parameter and rest parameters has to be last.
+//2. can not be used in object literal setters.
+/**
+ let object = {
+ // Syntax error: Can't use rest param in setter
+ set name(...value) {
+ // do something
+ }
+};
+// the reason is that setters can have only one value.
+ */
+
+//---------------------------------------END-----------------------------------------------------
+
+//The name Property
+//For debugging reasons, ECMAScript 6 adds the name property to all functions.
+// name will not refer to the actual function its just for debugging
+function doSomething() {
+  // empty
+}
+var doAnotherThing = function () {
+  // empty
+};
+console.log(doSomething.name); // "doSomething"
+console.log(doAnotherThing.name); // "doAnotherThing"
+
+// Special Cases of the name Property
+//1. bind() function will be prefixed by bound word
+//2. functions created using Function constructors will named anonymous
+var doSomething = function () {
+  // empty
+};
+console.log(doSomething.bind().name); // "bound doSomething"
+console.log(new Function().name); // "anonymous"
+
+//---------------------------------------END-----------------------------------------------------
+
+//Clarifying the Dual Purpose of Functions
