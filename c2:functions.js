@@ -143,3 +143,18 @@ console.log(new Function().name); // "anonymous"
 //---------------------------------------END-----------------------------------------------------
 
 //Clarifying the Dual Purpose of Functions
+//functions serve the dual purpose of being callable with or without new
+// functions which are called with new, the 'this' is a new object and it will returned
+
+function Person(name) {
+this.name = name; // when called without 'new' name will be set to global object bcz this is pointing to GO --> GlobalObject
+}
+var person = new Person("Nicholas");
+var notAPerson = Person("Nicholas");
+console.log(person);// "[Object object]"
+console.log(notAPerson); // "undefined"
+
+//but function without new will execute the function
+//In ES6 we have [[call]] which is used to call function(without new)
+//[[construct]] which is used to construct and return new this obj
+// arrow functions do not have [[construct]] method
