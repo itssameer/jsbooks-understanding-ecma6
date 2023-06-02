@@ -147,14 +147,81 @@ console.log(new Function().name); // "anonymous"
 // functions which are called with new, the 'this' is a new object and it will returned
 
 function Person(name) {
-this.name = name; // when called without 'new' name will be set to global object bcz this is pointing to GO --> GlobalObject
+  this.name = name; // when called without 'new' name will be set to global object bcz this is pointing to GO --> GlobalObject
 }
 var person = new Person("Nicholas");
-var notAPerson = Person("Nicholas");
-console.log(person);// "[Object object]"
+// var notAPerson = Person("Nicholas");
+console.log(person); // "[Object object]"
 console.log(notAPerson); // "undefined"
 
 //but function without new will execute the function
 //In ES6 we have [[call]] which is used to call function(without new)
 //[[construct]] which is used to construct and return new this obj
 // arrow functions do not have [[construct]] method
+
+//to distinguish whether the function is called with new or not
+//pre ES6 would check this instance
+//ex:
+function Person(name) {
+  if (this instanceof Person) {
+    this.name = name;
+    // using new
+  } else {
+    throw new Error("You must use new with Person.");
+  }
+}
+var person = new Person("Nicholas");
+// var notAPerson = Person("Nicholas"); // throw an error
+// but his has flaw
+// you easy change the this binding ex:
+var notAPerson = Person.call(person, "Michael"); // it will work
+
+// to avoid this ES6 introduced new metaproperty
+`new.target`;
+
+function Person(name) {
+  console.log(new.target); ///[Function: Person]
+
+  if (typeof new.target !== "undefined") {
+    this.name = name;
+  } else {
+    throw new Error("You must use new with Person.");
+  }
+}
+var person = new Person("Nicholas");
+var notAPerson = Person.call(person, "Michael"); // error!
+
+//when [[construct]] method is called new.target metapropery is filled with constructor of newly created object instance
+//Ex:
+function Person(name) {
+  console.log(new.target === Person);
+}
+
+var person = new Person("Nicholas"); //true
+//warning: Using new.target outside a function is a syntax error.
+
+//---------------------------------------END-----------------------------------------------------
+
+//Block-Level Functions in strict mode
+`"use strict";
+if (true) {
+  // throws a syntax error in ES5, not so in ES6
+  function doSomething() {
+    // empty
+  }
+}`;
+//functions declared inside the block, ES6 supports it not ES5
+// BLF in strict mode hoist to top of the block
+//BLF in non-strict mode hoist to function or to global object ex:
+// ECMAScript 6 behavior
+if (true) {
+  console.log(typeof doSomething);
+  // "function"
+  function doSomething() {
+    // empty
+  }
+  doSomething();
+}
+console.log(typeof doSomething);
+
+//---------------------------------------END-----------------------------------------------------
