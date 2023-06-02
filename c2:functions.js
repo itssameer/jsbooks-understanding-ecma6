@@ -225,3 +225,114 @@ if (true) {
 console.log(typeof doSomething);
 
 //---------------------------------------END-----------------------------------------------------
+
+//Arrow Functions
+// 1. No this, super, arguments, and new.target bindings: all these values are taken from the closest non array function(lexical)
+// 2. Cannot be called with new: arrow functions do not have [[construct]] method
+// 3. No prototype: no prototype property on arrow functions (no new so no need to prototype)
+// 4. you can not change "this" for arrow function it remains same during entire execution
+// 5. No duplicate named parameters : Arrow functions cannot have duplicate named parameters-
+// in strict or non-strict mode, as opposed to non-arrow functions, which cannot have duplicate named parameters only in strict mode
+// best place to use arrow functions are in event handlers..
+
+/* Arrow functions are more performant as its simple execution of code and there is no dual purposes as normal function 
+so js engines can optimize code better */
+
+//Arrow functions also have a name property that follows the same rule as other functions.
+
+//Arrow Function Syntax
+//when there is only one argument and single line of function body then we can write like below
+let reflect = (value) => value;
+//even though there is no explicit return statement value will be returned from the reflect function
+//but if you have more lines in function body then you have to use {} and write return explicitly.
+let reflect1 = (value) => {
+  //code
+  //...
+  return value;
+};
+
+// if you are returning object literal then we can use shorthand "({})" to do so
+let OL = () => ({
+  a: "a",
+  b: "b",
+  c: "c",
+});
+
+// arrow functions can access "this" and "argument" objects from container non arrow functions
+//ex:
+function createArrowFunctionReturningFirstArg() {
+  return () => arguments[0];
+}
+var arrowFunction = createArrowFunctionReturningFirstArg(5);
+console.log(arrowFunction());
+
+// you can still use call bind and apply on arrow functions except you can not over-ride the this.
+
+//---------------------------------------END-----------------------------------------------------
+
+//IIFE
+
+//an anonymous function and call it immediately without saving a reference
+//good for creating private scope
+
+(function () {
+  //do something
+})();
+
+//ex:
+
+let person = (function (name) {
+  return {
+    getName: function () {
+      return name;
+    },
+  };
+})("sam");
+
+//---------------------------------------END-----------------------------------------------------
+
+//Tail calls
+//Calling another function at the end of the function
+
+//Tail call optimization done only in strict mode.
+//Tail call situation JS engine can clear the container function from the call stack if all the below 3 conditions are satisfied.
+//1. The tail call does not require access to variables in the current stack frame (meaning the function is not a closure).
+//2. The function making the tail call has no further work to do after the tail call returns.
+//3. The result of the tail call is returned as the function value.
+//Ex:
+("use strict");
+function doSomething() {
+  // optimized b
+  return doSomethingElse();
+}
+
+//***most important ex:
+("use strict");
+function doSomething() {
+  // not optimized - call isn't in tail position
+  var result = doSomethingElse();
+  return result;
+} // its better to return the function call directly if you are not using result in container functions so that Optimization can happen.
+
+// most important place where Tail calls optimization is in recursive functions
+//ex:
+
+//Not Optimized code
+function factorial(n) {
+  if (n <= 1) {
+    return 1;
+  } else {
+    // not optimized - must multiply after returning
+    return n * factorial(n - 1);
+  }
+}
+//Optimized code
+function factorial(n, p = 1) {
+  if (n <= 1) {
+    return 1 * p;
+  } else {
+    let result = n * p;
+    // optimized
+    return factorial(n - 1, result);
+  }
+}
