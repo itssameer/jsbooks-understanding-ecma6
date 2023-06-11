@@ -100,8 +100,123 @@ const {
 } = node4;
 console.log(start);
 
-//waring
+`//waring
 // no variables declared!
 let {
   loc: {},
-} = node;
+} = node;`;
+//---------------------------------------END-----------------------------------------------------
+
+//Array Destructuring
+let colors = [
+  "red",
+  "green",
+  "blue",
+  undefined,
+  ["purple", "lightpurple"],
+  "a",
+  "b",
+  "c",
+];
+let [firstColor, secondColor] = colors;
+
+let [, , thirdColor] = colors;
+
+console.log(firstColor);
+console.log(secondColor);
+console.log(thirdColor);
+
+//Default Values
+let [, , , forthColor = "black"] = colors;
+console.log(forthColor); //black
+
+//Nested Array Destructuring
+let [, , , , [purple, lightpurple]] = colors;
+console.log(purple, lightpurple); //purple lightpurple
+
+//Rest Items
+let [, , , , , ...rest] = colors;
+console.log(rest); //[ 'a', 'b', 'c' ]
+
+// swapping variables in ECMAScript 6
+
+let a = 1,
+  b = 2;
+
+console.log(a, b); // 1 2
+
+[a, b] = [b, a]; // in right side the temporary array is created to swap the value.
+
+console.log(a, b); // 2 1
+
+//cloning an array
+// cloning an array in ECMAScript 6
+let [...clonedColors] = colors;
+console.log(clonedColors);
+//rest items are used to copy values from the colors array into the clonedColors array
+
+//---------------------------------------END-----------------------------------------------------
+// Mixed Destructuring
+
+let mixedNode = {
+  type: "Identifier",
+  name: "foo",
+  loc: {
+    started: {
+      line: 1,
+      column: 1,
+    },
+    end: {
+      line: 1,
+      column: 4,
+    },
+  },
+  range: [0, 3],
+};
+let {
+  loc: { started },
+  range: [startIndex, endIndex],
+} = mixedNode;
+
+console.log(started, startIndex, endIndex);
+
+//---------------------------------------END-----------------------------------------------------
+
+//Destructured Parameters
+// pre - es6 style to receive optional params
+function setCookie(name, value, options) {
+  options = options || {}; // we need to read whole function body in order to understand what are options expected
+  let secure = options.secure,
+    path = options.path,
+    domain = options.domain,
+    expires = options.expires;
+  // code to set the cookie
+}
+
+//ES6 style
+function setCookie(name, value, { secure, path, domain, expires }) {
+  /* now we can expect that what are all the options. !!important: we have to pass 3rd param object
+   otherwise it will error. if we want to make 3rd param optional we can default it to {}
+   
+   ex: function setCookie(name, value, { secure, path, domain, expires } = {}) 
+   
+// we can also default each optional params ex:
+
+function setCookie(
+  name,
+  value,
+  {
+    secure = false,
+    path = "/",
+    domain = "example.com",
+    expires = new Date(Date.now() + 360000000),
+  } = {}
+)
+   */
+  //code to set the cookie
+}
+
+setCookie("type", "js", {
+  secure: true,
+  expires: 60000,
+});
