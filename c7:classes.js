@@ -400,3 +400,21 @@ console.log(newArray instanceof Array); // true
 //---------------------------------------END-----------------------------------------------------
 
 //Using new.target in Class Constructors
+// new.target gives how the class is invoked.
+// if new.target is undefined then function is called without new
+// in classes new.target can not be undefined as obj instances can not be created with out new.
+// new.target points to the function which it is being called from.
+class WhatsInNew {
+  constructor() {
+    console.log(new.target); // WhatsInNew , InheritWhatsInNew
+  }
+}
+
+class InheritWhatsInNew extends WhatsInNew {
+  constructor() {
+    super();
+  }
+}
+
+const ObjInstance = new WhatsInNew();
+const ObjInstance1 = new InheritWhatsInNew();
